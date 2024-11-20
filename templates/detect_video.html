@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detect from Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .video-feed {
+            border: 2px solid white;
+            display: inline-block;
+            width: 800px;
+            height: 450px;
+            background-color: black;
+            margin-top: 20px;
+            overflow: hidden; /* Ensures content doesn't overflow the frame */
+            position: relative; /* Ensures proper child alignment */
+        }
+
+        .video-feed img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Maintains aspect ratio while fitting within the frame */
+        }
+
+        .info-panel {
+            margin-top: 20px;
+        }
+
+        .info-panel h2 {
+            margin: 5px 0;
+        }
+
+        .plot-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .plot-buttons button {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .plot-buttons button:hover {
+            background-color: #bdc3c7;
+        }
+
+        .nav-buttons {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons a,
+        .nav-buttons button {
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-buttons a.back {
+            background-color: #3498db; /* Blue color for Back */
+        }
+
+        .nav-buttons a.back:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+
+        .nav-buttons a.exit {
+            background-color: #e74c3c; /* Red color for Exit */
+        }
+
+        .nav-buttons a.exit:hover {
+            background-color: #c0392b; /* Darker red on hover */
+        }
+
+        .nav-buttons button.upload {
+            background-color: #1abc9c; /* Teal color for Upload */
+        }
+
+        .nav-buttons button.upload:hover {
+            background-color: #16a085; /* Darker teal on hover */
+        }
+
+        input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            background-color: #f1c40f;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #d4ac0d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detect from Video</h1>
+        
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="{{ url_for('selection') }}" class="back">⬅ BACK</a>
+            <a href="#" class="exit" onclick="window.close()">❌ EXIT</a>
+
+            <!-- Upload Form -->
+            <form action="{{ url_for('process_video') }}" method="post" enctype="multipart/form-data" style="display: inline;">
+                <label for="file-upload" class="custom-file-upload">
+                    Choose File
+                </label>
+                <input id="file-upload" type="file" name="video" accept="video/*" required>
+                <button type="submit" class="upload">Upload</button>
+            </form>
+        </div>
+
+        <!-- Fixed-Sized Video Feed -->
+        <div class="video-feed">
+            {% if filename %}
+                <img id="video-stream" src="{{ url_for('uploaded_video_feed', filename=filename) }}" alt="Video Feed">
+            {% else %}
+                <h2>Video feed will appear here after upload</h2>
+            {% endif %}
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <h2>Status: {% if filename %} Detecting... {% else %} Waiting for video selection... {% endif %}</h2>
+            <h2 id="total-people">Total People: 0</h2>
+        </div>
+
+        <!-- Plot Buttons -->
+        <div class="plot-buttons">
+            <!-- Restart Video Form -->
+            <form action="{{ url_for('detect_video') }}" method="get" style="display: inline;">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <button type="submit">Restart Video</button>
+            </form>
+
+            <!-- Other Buttons -->
+            <button onclick="window.location.href='/enumeration_plot'">Enumeration Plot</button>
+            <button onclick="window.location.href='/accuracy_plot'">Avg. Accuracy Plot</button>
+            <button onclick="window.location.href='/generate_report'">Generate Crowd Report</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript function to dynamically update the "Total People" count
+        function updateTotalPeople(count) {
+            const totalPeopleElement = document.getElementById("total-people");
+            totalPeopleElement.textContent = `Total People: ${count}`;
+        }
+
+        
+
+        // Example usage: Replace this with real updates from the backend
+        // Call this function with the count of people detected
+        // Example: updateTotalPeople(22);
+    </script>
+</body>
+</html>

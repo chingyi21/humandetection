@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Time Human Detection & Counting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Real Time Human Detection and Counting</h1>
+        <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Human Icon" class="icon">
+        <div class="button-container">
+            <a href="{{ url_for('selection') }}" class="button start">▶ START</a>
+            <a href="#" class="button exit" onclick="window.close()">❌ EXIT</a>
+        </div>
+    </div>
+</body>
+</html>

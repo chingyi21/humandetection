@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detect from Camera</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Detect from Camera</h1>
+
+        <!-- Navigation Buttons -->
+        <div class="button-container">
+            <a href="{{ url_for('selection') }}" class="button back">⬅ BACK</a>
+            <a href="index.html" class="button exit" onclick="window.close()">❌ EXIT</a>
+        </div>
+
+        <!-- Video Feed -->
+        <div class="video-container">
+            <img src="{{ url_for('video_feed') }}" alt="Camera Feed">
+        </div>
+
+
+        <!-- Action Buttons -->
+        <div class="button-container">
+            <button class="button action" onclick="window.location.reload()">Restart Camera</button>
+            <a href="{{ url_for('enumeration_plot') }}" class="button action" target="_blank">Enumeration Plot</a>
+            <a href="{{ url_for('accuracy_plot') }}" class="button action" target="_blank">Avg. Accuracy Plot</a>
+            <a href="{{ url_for('generate_report') }}" class="button action" target="_blank">Generate Crowd Report</a>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to periodically update stats
+        setInterval(async () => {
+            try {
+                const response = await fetch('/video_feed_stats');  // API endpoint to fetch stats
+                const data = await response.json();
+                document.getElementById('current-count').innerText = `Current Count: ${data.current_count}`;
+                document.getElementById('total-count').innerText = `Total Count: ${data.total_count}`;
+                document.getElementById('leaving-count').innerText = `Leaving: ${data.leaving_count}`;
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+            }
+        }, 1000);  // Update every 1 second
+    </script>
+</body>
+</html>

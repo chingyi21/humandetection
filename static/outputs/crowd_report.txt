@@ -1,0 +1,7 @@
+
+    CROWD REPORT:
+    Max Human Limit: 25
+    Max Human Count: 7
+    Avg. Accuracy: 1.00
+    Status: Not Crowded
+    
